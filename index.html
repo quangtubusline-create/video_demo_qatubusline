@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vibe - Video Feed UI (Tailwind CSS)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vibe - Video Feed UI (Full Mobile Viewport)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -21,13 +21,13 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body class="bg-white sm:bg-gray-100 flex justify-center items-center min-h-[100dvh] m-0 p-0 overflow-hidden">
 
-  <!-- Khung mô phỏng điện thoại -->
-  <div class="w-full max-w-[414px] h-screen max-h-[896px] bg-white flex flex-col overflow-hidden shadow-2xl">
+  <!-- Tràn 100% màn hình trên Mobile (w-full h-[100dvh]), tự động giới hạn khung gọn gàng trên Desktop (sm:max-w-[430px] sm:h-[92dvh]) -->
+  <div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
     
     <!-- ================= TOP HEADER ================= -->
-    <header class="flex items-center justify-between px-4 py-3 bg-white z-10">
+    <header class="flex items-center justify-between px-4 py-3 bg-white z-10 shrink-0">
       <div class="flex items-center gap-1.5">
         <div class="w-[22px] h-[22px] rounded-md bg-gradient-to-br from-rose-600 to-rose-400 flex items-center justify-center text-white font-bold text-xs">
           V
@@ -49,8 +49,8 @@
     </header>
 
     <!-- ================= VIDEO FEED AREA ================= -->
-    <main class="flex-1 px-2 pb-2 flex flex-col overflow-hidden">
-      <div class="relative flex-1 rounded-[20px] overflow-hidden bg-gray-800 flex flex-col justify-between">
+    <main class="flex-1 px-2 pb-1.5 flex flex-col overflow-hidden min-h-0">
+      <div class="relative flex-1 w-full h-full rounded-[20px] overflow-hidden bg-gray-800 flex flex-col justify-between">
         
         <!-- Ảnh nền giả lập video -->
         <img src="https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=800&q=80" alt="Phố cổ Hà Nội" class="absolute inset-0 w-full h-full object-cover z-[1]">
@@ -187,7 +187,7 @@
     </main>
 
     <!-- ================= BOTTOM NAVIGATION ================= -->
-    <nav class="flex items-center justify-around px-2 pt-2 pb-3.5 bg-white border-t border-gray-100">
+    <nav class="flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white border-t border-gray-100 shrink-0">
       <button class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
