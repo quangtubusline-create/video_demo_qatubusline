@@ -1,42 +1,24 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>qatubusline Video</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="./img/favicon.ico" type="image/x-icon" sizes="32x32">
-
-<link rel="apple-touch-icon" href="./img/favicon.ico" sizes="180x180">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vibe - Main Layout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    @keyframes spin-slow {
-      100% { transform: rotate(360deg); }
-    }
-    .animate-disc {
-      animation: spin-slow 6s linear infinite;
-    }
-    .music-disc-gradient {
-      background: radial-gradient(circle, #e11d48 0%, #e11d48 35%, #ffffff 36%, #ffffff 48%, #262626 49%, #171717 100%);
-    }
-    @keyframes slideUp {
-      from { transform: translateY(35%); opacity: 0.4; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .animate-slide-up {
-      animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
   </style>
 </head>
 <body class="bg-white sm:bg-gray-100 flex justify-center items-center min-h-[100dvh] m-0 p-0 overflow-hidden select-none">
 
-  <div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
+  <!-- Khung mô phỏng ứng dụng di động -->
+  <div class="relative w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-black flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
     
-    <!-- Top Header -->
-    <header class="flex items-center justify-between px-4 py-3 bg-white z-20 shrink-0">
+    <!-- ================= 1. NAVBAR TRÊN CỐ ĐỊNH ================= -->
+    <header class="absolute top-0 inset-x-0 flex items-center justify-between px-4 py-3 bg-white/90 backdrop-blur-md z-30 border-b border-gray-100/50">
       <div class="flex items-center gap-1.5">
         <div class="w-[22px] h-[22px] rounded-md bg-gradient-to-br from-rose-600 to-rose-400 flex items-center justify-center text-white font-bold text-xs">
           V
@@ -47,136 +29,30 @@
       <h1 class="text-[17px] font-semibold text-gray-900">Trang Chủ</h1>
 
       <div class="flex items-center gap-3.5">
-        <button id="nextVideoBtn" title="Chuyển video ngẫu nhiên" class="text-gray-900 hover:opacity-75 transition">
+        <button id="refreshBtn" title="Tải lại video" class="text-gray-900 hover:opacity-75 transition" aria-label="Làm mới">
           <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.65-5.65"></path>
           </svg>
         </button>
         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
       </div>
     </header>
 
-    <!-- Video Feed Area -->
-    <main class="flex-1 px-2 pb-1.5 flex flex-col overflow-hidden min-h-0">
-      <div id="swipeContainer" class="relative flex-1 w-full h-full rounded-[20px] overflow-hidden bg-neutral-950 flex flex-col justify-between touch-pan-x">
-        
-        <!-- Vùng hiển thị video (Hỗ trợ cả đứng và ngang) -->
-        <div id="videoStage" class="absolute inset-0 z-[1] flex items-center justify-center bg-black overflow-hidden">
-          <video 
-            id="mainVideo" 
-            class="w-full h-full object-contain transition-opacity duration-300" 
-            playsinline 
-            autoplay 
-            muted 
-            loop
-          ></video>
 
-          <iframe 
-            id="driveIframe" 
-            class="hidden w-full h-full border-0" 
-            allow="autoplay; fullscreen"
-          ></iframe>
-
-          <!-- Màn hình chờ -->
-          <div id="loadingOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/90 text-white z-10">
-            <div class="w-9 h-9 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p class="text-xs text-white/80 font-medium">Đang tải video tự động phát...</p>
-          </div>
-        </div>
-        
-        <!-- Gradient Overlay -->
-        <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/50 to-transparent z-[2] pointer-events-none"></div>
-        <div class="absolute bottom-0 inset-x-0 h-60 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-[2] pointer-events-none"></div>
-
-        <!-- Top Controls Inside Video -->
-        <div class="relative z-[3] flex items-center justify-between px-3.5 py-4 pointer-events-auto">
-          <div class="flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-full shadow-md">
-            <span class="w-[7px] h-[7px] rounded-full bg-rose-600 animate-pulse"></span>
-            <span class="text-[10px] font-bold leading-[1.1] text-gray-900 text-center uppercase">
-              TRỰC<br>TIẾP
-            </span>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <button class="text-white/85 text-[15px] font-semibold text-center leading-tight drop-shadow pb-1">Đang theo<br>dõi</button>
-            <button class="relative text-white text-[15px] font-bold text-center leading-tight drop-shadow pb-1 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-6 after:h-[2.5px] after:bg-white after:rounded-full">Dành cho<br>bạn</button>
-          </div>
-
-          <!-- Nút bật/tắt tiếng -->
-          <button id="muteToggleBtn" class="w-9 h-9 rounded-full bg-white/85 flex items-center justify-center text-gray-900 hover:bg-white transition shadow" aria-label="Bật/Tắt tiếng">
-            <svg id="iconMuted" class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <line x1="23" y1="9" x2="17" y2="15"></line>
-              <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
-            <svg id="iconUnmuted" class="w-[18px] h-[18px] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Right Sidebar -->
-        <aside class="absolute right-3 bottom-6 z-[4] flex flex-col items-center gap-4">
-          <div class="relative mb-1.5">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="Creator" class="w-12 h-12 rounded-full border-2 border-white object-cover">
-            <button class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow">+</button>
-          </div>
-
-          <div id="likeBtn" class="flex flex-col items-center gap-1 cursor-pointer group">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
-              <svg id="heartIcon" class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">184.2K</span>
-          </div>
-
-          <div class="flex flex-col items-center gap-1 cursor-pointer">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900">
-              <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">2,481</span>
-          </div>
-
-          <div class="flex flex-col items-center gap-1 cursor-pointer">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900">
-              <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">34.5K</span>
-          </div>
-
-          <div class="relative mt-1">
-            <span class="absolute -top-3 -right-0.5 text-white/80 text-xs">♫</span>
-            <div class="w-11 h-11 rounded-full music-disc-gradient border-2 border-white/60 animate-disc"></div>
-          </div>
-        </aside>
-
-        <!-- Video Info -->
-        <div class="relative z-[3] pl-4 pr-[74px] pb-5 text-white pointer-events-none">
-          <div class="flex items-center gap-1.5 mb-2 flex-wrap">
-            <span id="authorHandle" class="text-base font-bold drop-shadow">@user</span>
-            <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">TÁC GIẢ</span>
-          </div>
-          <p id="videoCaption" class="text-sm leading-snug text-white/95 mb-3 drop-shadow">Lướt lên trên hoặc bấm nút dưới để xem video tiếp theo 🎬✨</p>
-          <div class="flex items-center gap-2">
-            <div class="w-[22px] h-[22px] rounded-full bg-white/25 flex items-center justify-center shrink-0">
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-            </div>
-            <span id="videoTimestamp" class="text-[13px] text-white/90 truncate">Original sound</span>
-          </div>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="absolute bottom-0 inset-x-0 h-[3.5px] bg-white/35 z-[5]">
-          <div id="progressBar" class="w-0 h-full bg-rose-600 transition-all duration-150"></div>
-        </div>
-      </div>
+    <!-- ================= 2. KHU VỰC IFRAME Ở GIỮA (CHỨA VIDEO) ================= -->
+    <!-- Sử dụng absolute inset-0 để thẻ iframe lấp đầy khoảng trống giữa 2 navbar -->
+    <main class="absolute inset-0 z-10 overflow-hidden bg-black">
+      <iframe 
+        id="videoFrame" 
+        src="./player.html" 
+        class="w-full h-full border-0" 
+        allow="autoplay; fullscreen"
+      ></iframe>
     </main>
 
-    <!-- Bottom Navigation -->
-    <nav class="flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white border-t border-gray-100 shrink-0 z-20">
+
+    <!-- ================= 3. NAVBAR DƯỚI CỐ ĐỊNH ================= -->
+    <nav class="absolute bottom-0 inset-x-0 flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white/90 backdrop-blur-md border-t border-gray-100 z-30">
       <button class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         <span>Trang chủ</span>
@@ -187,7 +63,8 @@
         <span>Khám phá</span>
       </button>
 
-      <button id="randomBtnCenter" class="w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition">
+      <!-- Nút tròn giữa (có thể dùng để gọi hàm đổi video trong iframe) -->
+      <button id="centerActionBtn" class="w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition" aria-label="Thao tác">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </button>
 
@@ -201,153 +78,26 @@
         <span>Hồ sơ</span>
       </button>
     </nav>
+
   </div>
 
   <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ0fmevto-mto5JkkHV03QLY_Q4PPwkP2uj4vjoymVFBSopIz3F-LsHpXXrVz3dnPnaat93zqMOvG2/pub?gid=399187117&single=true&output=csv';
-    
-    let videoList = [];
-    let currentIndex = -1;
+    // Ví dụ liên kết tương tác giữa trang chính (index) và file iframe con (player.html)
+    const videoFrame = document.getElementById('videoFrame');
 
-    const mainVideo = document.getElementById('mainVideo');
-    const driveIframe = document.getElementById('driveIframe');
-    const videoStage = document.getElementById('videoStage');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const authorHandle = document.getElementById('authorHandle');
-    const videoTimestamp = document.getElementById('videoTimestamp');
-    const progressBar = document.getElementById('progressBar');
-    const swipeContainer = document.getElementById('swipeContainer');
-
-    function extractDriveId(url) {
-      if (!url) return null;
-      const match = url.match(/(?:id=|\/d\/)([a-zA-Z0-9_-]{15,})/);
-      return match ? match[1] : null;
-    }
-
-    function parseCSV(text) {
-      const lines = text.trim().split(/\r?\n/);
-      const items = [];
-      for (let i = 1; i < lines.length; i++) {
-        const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
-        if (cols.length >= 3 && cols[2]) {
-          items.push({ timestamp: cols[0] || '', userId: cols[1] || 'user', rawUrl: cols[2] });
-        }
-      }
-      return items;
-    }
-
-    async function fetchVideos() {
-      try {
-        const res = await fetch(`${CSV_URL}&t=${Date.now()}`);
-        const csvText = await res.text();
-        videoList = parseCSV(csvText);
-        if (videoList.length > 0) playRandomVideo();
-        else loadingOverlay.innerHTML = '<p class="text-sm text-white/80">Chưa có video.</p>';
-      } catch (err) {
-        loadingOverlay.innerHTML = '<p class="text-sm text-rose-400">Lỗi tải dữ liệu.</p>';
-      }
-    }
-
-    function playRandomVideo() {
-      if (videoList.length === 0) return;
-      let nextIndex = Math.floor(Math.random() * videoList.length);
-      if (videoList.length > 1 && nextIndex === currentIndex) nextIndex = (nextIndex + 1) % videoList.length;
-      currentIndex = nextIndex;
-      const item = videoList[currentIndex];
-
-      videoStage.classList.remove('animate-slide-up');
-      void videoStage.offsetWidth;
-      videoStage.classList.add('animate-slide-up');
-
-      authorHandle.textContent = `@${item.userId}`;
-      videoTimestamp.textContent = `Original sound • ${item.timestamp}`;
-      progressBar.style.width = '0%';
-
-      const driveId = extractDriveId(item.rawUrl);
-      if (driveId) {
-        const directStreamUrl = `https://drive.google.com/uc?export=download&id=${driveId}`;
-        driveIframe.classList.add('hidden');
-        driveIframe.src = '';
-        mainVideo.classList.remove('hidden');
-        mainVideo.src = directStreamUrl;
-        
-        // Đảm bảo luôn bật trạng thái muted để trình duyệt chịu tự động phát ngay lập tức
-        mainVideo.muted = true;
-        mainVideo.play().then(() => {
-          loadingOverlay.classList.add('hidden');
-        }).catch(() => {
-          // Fallback nếu trình duyệt chặn
-          mainVideo.classList.add('hidden');
-          driveIframe.classList.remove('hidden');
-          driveIframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
-          loadingOverlay.classList.add('hidden');
-        });
+    // Khi bấm nút làm mới trên header hoặc nút tròn ở giữa navbar, có thể yêu cầu iframe load lại hoặc đổi video
+    function triggerAction() {
+      if (videoFrame.contentWindow && typeof videoFrame.contentWindow.loadNextVideo === 'function') {
+        // Nếu file player.html có định nghĩa sẵn hàm loadNextVideo()
+        videoFrame.contentWindow.loadNextVideo();
       } else {
-        mainVideo.classList.remove('hidden');
-        mainVideo.src = item.rawUrl;
-        mainVideo.muted = true;
-        mainVideo.play().then(() => {
-          loadingOverlay.classList.add('hidden');
-        }).catch(() => {});
+        // Hoặc đơn giản là reload lại src của iframe
+        videoFrame.src = videoFrame.src;
       }
     }
 
-    mainVideo.addEventListener('timeupdate', () => {
-      if (mainVideo.duration) {
-        progressBar.style.width = `${(mainVideo.currentTime / mainVideo.duration) * 100}%`;
-      }
-    });
-
-    // Bấm vào video để play/pause
-    videoStage.addEventListener('click', () => {
-      if (!mainVideo.classList.contains('hidden')) {
-        if (mainVideo.paused) mainVideo.play();
-        else mainVideo.pause();
-      }
-    });
-
-    // Bật/Tắt tiếng thủ công
-    const muteToggleBtn = document.getElementById('muteToggleBtn');
-    const iconMuted = document.getElementById('iconMuted');
-    const iconUnmuted = document.getElementById('iconUnmuted');
-
-    muteToggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mainVideo.muted = !mainVideo.muted;
-      iconMuted.classList.toggle('hidden', !mainVideo.muted);
-      iconUnmuted.classList.toggle('hidden', mainVideo.muted);
-    });
-
-    // Thả tim
-    let liked = false;
-    document.getElementById('likeBtn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      liked = !liked;
-      const heartIcon = document.getElementById('heartIcon');
-      heartIcon.setAttribute('fill', liked ? '#e11d48' : 'none');
-      heartIcon.setAttribute('stroke', liked ? '#e11d48' : 'currentColor');
-    });
-
-    // Vuốt lên trên để chuyển video ngẫu nhiên
-    let touchStartY = 0;
-    swipeContainer.addEventListener('touchstart', (e) => { touchStartY = e.changedTouches[0].screenY; }, { passive: true });
-    swipeContainer.addEventListener('touchend', (e) => {
-      if (touchStartY - e.changedTouches[0].screenY > 50) playRandomVideo();
-    }, { passive: true });
-
-    let isScrolling = false;
-    swipeContainer.addEventListener('wheel', (e) => {
-      if (!isScrolling && e.deltaY > 40) {
-        isScrolling = true;
-        playRandomVideo();
-        setTimeout(() => { isScrolling = false; }, 600);
-      }
-    }, { passive: true });
-
-    document.getElementById('nextVideoBtn').addEventListener('click', playRandomVideo);
-    document.getElementById('randomBtnCenter').addEventListener('click', playRandomVideo);
-
-    fetchVideos();
+    document.getElementById('refreshBtn').addEventListener('click', triggerAction);
+    document.getElementById('centerActionBtn').addEventListener('click', triggerAction);
   </script>
 </body>
 </html>
