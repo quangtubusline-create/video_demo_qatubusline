@@ -1,0 +1,22 @@
+{
+  "name": "video_demo_qatubusline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel-build": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quangtubusline-create/video_demo_qatubusline.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/quangtubusline-create/video_demo_qatubusline/issues"
+  },
+  "homepage": "https://github.com/quangtubusline-create/video_demo_qatubusline#readme"
+}
