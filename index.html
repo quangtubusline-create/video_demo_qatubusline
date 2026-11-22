@@ -1,235 +1,237 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>qatubusline Video</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="./img/favicon.ico" rel="icon" type="apple-touch-icon" sizes="180x180">
-  <style>
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    @keyframes spin-slow {
-      100% { transform: rotate(360deg); }
-    }
-    .animate-disc {
-      animation: spin-slow 6s linear infinite;
-    }
-    .music-disc-gradient {
-      background: radial-gradient(circle, #e11d48 0%, #e11d48 35%, #ffffff 36%, #ffffff 48%, #262626 49%, #171717 100%);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>qatubusline Video</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="./img/favicon.ico" type="image/x-icon" sizes="32x32">
+
+<link rel="apple-touch-icon" href="./img/favicon.ico" sizes="180x180">
+<style>
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  @keyframes spin-slow {
+    100% { transform: rotate(360deg); }
+  }
+  .animate-disc {
+    animation: spin-slow 6s linear infinite;
+  }
+  .music-disc-gradient {
+    background: radial-gradient(circle, #e11d48 0%, #e11d48 35%, #ffffff 36%, #ffffff 48%, #262626 49%, #171717 100%);
+  }
+</style>
 </head>
 <body class="bg-white sm:bg-gray-100 flex justify-center items-center min-h-[100dvh] m-0 p-0 overflow-hidden">
 
-  <!-- Tràn 100% màn hình trên Mobile (w-full h-[100dvh]), tự động giới hạn khung gọn gàng trên Desktop (sm:max-w-[430px] sm:h-[92dvh]) -->
-  <div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
-    
-    <!-- ================= TOP HEADER ================= -->
-    <header class="flex items-center justify-between px-4 py-3 bg-white z-10 shrink-0">
-      <div class="flex items-center gap-1.5">
-        <div class="w-[22px] h-[22px] rounded-md bg-gradient-to-br from-rose-600 to-rose-400 flex items-center justify-center text-white font-bold text-xs">
-          V
+<!-- Tràn 100% màn hình trên Mobile (w-full h-[100dvh]), tự động giới hạn khung gọn gàng trên Desktop (sm:max-w-[430px] sm:h-[92dvh]) -->
+<div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
+  
+  <!-- ================= TOP HEADER ================= -->
+  <header class="flex items-center justify-between px-4 py-3 bg-white z-10 shrink-0">
+    <div class="flex items-center gap-1.5">
+      <div class="w-[22px] h-[22px] rounded-md bg-gradient-to-br from-rose-600 to-rose-400 flex items-center justify-center text-white font-bold text-xs">
+        V
+      </div>
+      <span class="text-[19px] font-bold text-gray-900 tracking-tight">Vibe</span>
+    </div>
+
+    <h1 class="text-[17px] font-semibold text-gray-900">Trang Chủ</h1>
+
+    <div class="flex items-center gap-3.5">
+      <button class="text-gray-900 hover:opacity-75 transition" aria-label="Tìm kiếm">
+        <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+    </div>
+  </header>
+
+  <!-- ================= VIDEO FEED AREA ================= -->
+  <main class="flex-1 px-2 pb-1.5 flex flex-col overflow-hidden min-h-0">
+    <div class="relative flex-1 w-full h-full rounded-[20px] overflow-hidden bg-gray-800 flex flex-col justify-between">
+      
+      <!-- Ảnh nền giả lập video -->
+      <img src="https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=800&q=80" alt="Phố cổ Hà Nội" class="absolute inset-0 w-full h-full object-cover z-[1]">
+      
+      <!-- Lớp phủ gradient giúp chữ dễ đọc -->
+      <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/35 to-transparent z-[2] pointer-events-none"></div>
+      <div class="absolute bottom-0 inset-x-0 h-60 bg-gradient-to-t from-black/80 via-black/25 to-transparent z-[2] pointer-events-none"></div>
+
+      <!-- Top Controls Inside Video -->
+      <div class="relative z-[3] flex items-center justify-between px-3.5 py-4">
+        <div class="flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-full shadow-md">
+          <span class="w-[7px] h-[7px] rounded-full bg-rose-600 animate-pulse"></span>
+          <span class="text-[10px] font-bold leading-[1.1] text-gray-900 text-center uppercase">
+            TRỰC<br>TIẾP
+          </span>
         </div>
-        <span class="text-[19px] font-bold text-gray-900 tracking-tight">Vibe</span>
-      </div>
 
-      <h1 class="text-[17px] font-semibold text-gray-900">Trang Chủ</h1>
-
-      <div class="flex items-center gap-3.5">
-        <button class="text-gray-900 hover:opacity-75 transition" aria-label="Tìm kiếm">
-          <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
-      </div>
-    </header>
-
-    <!-- ================= VIDEO FEED AREA ================= -->
-    <main class="flex-1 px-2 pb-1.5 flex flex-col overflow-hidden min-h-0">
-      <div class="relative flex-1 w-full h-full rounded-[20px] overflow-hidden bg-gray-800 flex flex-col justify-between">
-        
-        <!-- Ảnh nền giả lập video -->
-        <img src="https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=800&q=80" alt="Phố cổ Hà Nội" class="absolute inset-0 w-full h-full object-cover z-[1]">
-        
-        <!-- Lớp phủ gradient giúp chữ dễ đọc -->
-        <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/35 to-transparent z-[2] pointer-events-none"></div>
-        <div class="absolute bottom-0 inset-x-0 h-60 bg-gradient-to-t from-black/80 via-black/25 to-transparent z-[2] pointer-events-none"></div>
-
-        <!-- Top Controls Inside Video -->
-        <div class="relative z-[3] flex items-center justify-between px-3.5 py-4">
-          <div class="flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-full shadow-md">
-            <span class="w-[7px] h-[7px] rounded-full bg-rose-600 animate-pulse"></span>
-            <span class="text-[10px] font-bold leading-[1.1] text-gray-900 text-center uppercase">
-              TRỰC<br>TIẾP
-            </span>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <button class="text-white/85 text-[15px] font-semibold text-center leading-tight drop-shadow pb-1 hover:text-white transition">
-              Đang theo<br>dõi
-            </button>
-            <button class="relative text-white text-[15px] font-bold text-center leading-tight drop-shadow pb-1 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-6 after:h-[2.5px] after:bg-white after:rounded-full">
-              Dành cho<br>bạn
-            </button>
-          </div>
-
-          <button class="w-9 h-9 rounded-full bg-white/85 flex items-center justify-center text-gray-900 hover:bg-white transition" aria-label="Bộ lọc">
-            <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14"></line>
-              <line x1="4" y1="10" x2="4" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12" y2="3"></line>
-              <line x1="20" y1="21" x2="20" y2="16"></line>
-              <line x1="20" y1="12" x2="20" y2="3"></line>
-              <line x1="1" y1="14" x2="7" y2="14"></line>
-              <line x1="9" y1="8" x2="15" y2="8"></line>
-              <line x1="17" y1="16" x2="23" y2="16"></line>
-            </svg>
+        <div class="flex items-center gap-4">
+          <button class="text-white/85 text-[15px] font-semibold text-center leading-tight drop-shadow pb-1 hover:text-white transition">
+            Đang theo<br>dõi
+          </button>
+          <button class="relative text-white text-[15px] font-bold text-center leading-tight drop-shadow pb-1 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-6 after:h-[2.5px] after:bg-white after:rounded-full">
+            Dành cho<br>bạn
           </button>
         </div>
 
-        <!-- Right Interaction Sidebar -->
-        <aside class="absolute right-3 bottom-6 z-[4] flex flex-col items-center gap-4">
-          <div class="relative mb-1.5">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="@linhdan.creatives" class="w-12 h-12 rounded-full border-2 border-white object-cover">
-            <button class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow hover:bg-rose-700 transition" aria-label="Theo dõi">
-              +
-            </button>
-          </div>
+        <button class="w-9 h-9 rounded-full bg-white/85 flex items-center justify-center text-gray-900 hover:bg-white transition" aria-label="Bộ lọc">
+          <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+        </button>
+      </div>
 
-          <div class="flex flex-col items-center gap-1 cursor-pointer group">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
-              <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">184.2K</span>
-          </div>
-
-          <div class="flex flex-col items-center gap-1 cursor-pointer group">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
-              <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">2,481</span>
-          </div>
-
-          <div class="flex flex-col items-center gap-1 cursor-pointer group">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
-              <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">34.5K</span>
-          </div>
-
-          <div class="flex flex-col items-center gap-1 cursor-pointer group">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
-              <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="18" cy="5" r="3"></circle>
-                <circle cx="6" cy="12" r="3"></circle>
-                <circle cx="18" cy="19" r="3"></circle>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-              </svg>
-            </div>
-            <span class="text-xs font-semibold text-white drop-shadow">12.8K</span>
-          </div>
-
-          <!-- Đĩa nhạc xoay -->
-          <div class="relative mt-1">
-            <span class="absolute -top-3 -right-0.5 text-white/80 text-xs">♫</span>
-            <div class="w-11 h-11 rounded-full music-disc-gradient border-2 border-white/60 animate-disc"></div>
-          </div>
-        </aside>
-
-        <!-- Bottom Left Caption & Metadata -->
-        <div class="relative z-[3] pl-4 pr-[74px] pb-5 text-white">
-          <div class="flex items-center gap-1.5 mb-2 flex-wrap">
-            <span class="text-base font-bold drop-shadow">@linhdan.creatives</span>
-            <span class="inline-flex text-white" title="Đã xác minh">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="M12 2l2.4 2.4 3.4-.4.4 3.4L20.6 10l-2.4 2.4.4 3.4-3.4.4L12.8 18.6 10.4 16.2l-3.4.4-.4-3.4L4.2 10.8l2.4-2.4-.4-3.4 3.4-.4L12 2z"></path>
-                <polyline points="9 11 11 13 15 9"></polyline>
-              </svg>
-            </span>
-            <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
-              TÁC GIẢ
-            </span>
-          </div>
-
-          <p class="text-sm leading-snug text-white/95 mb-3 drop-shadow">
-            Một ngày dạo quanh phố phường Hà Nội đón nắng sớm 🌿☕ <span class="font-semibold">#vibes #hanoi #dailyvlog</span>
-          </p>
-
-          <div class="flex items-center gap-2">
-            <div class="w-[22px] h-[22px] rounded-full bg-white/25 flex items-center justify-center shrink-0">
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 18V5l12-2v13"></path>
-                <circle cx="6" cy="18" r="3"></circle>
-                <circle cx="18" cy="16" r="3"></circle>
-              </svg>
-            </div>
-            <span class="text-[13px] text-white/90 truncate">Original sound - Dan Dan • Nhạc nền thịnh hành</span>
-          </div>
+      <!-- Right Interaction Sidebar -->
+      <aside class="absolute right-3 bottom-6 z-[4] flex flex-col items-center gap-4">
+        <div class="relative mb-1.5">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="@linhdan.creatives" class="w-12 h-12 rounded-full border-2 border-white object-cover">
+          <button class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow hover:bg-rose-700 transition" aria-label="Theo dõi">
+            +
+          </button>
         </div>
 
-        <!-- Video Progress Bar -->
-        <div class="absolute bottom-0 inset-x-0 h-[3.5px] bg-white/35 z-[5]">
-          <div class="w-[68%] h-full bg-rose-600"></div>
+        <div class="flex flex-col items-center gap-1 cursor-pointer group">
+          <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
+            <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-white drop-shadow">184.2K</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 cursor-pointer group">
+          <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
+            <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-white drop-shadow">2,481</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 cursor-pointer group">
+          <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
+            <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-white drop-shadow">34.5K</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 cursor-pointer group">
+          <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
+            <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <span class="text-xs font-semibold text-white drop-shadow">12.8K</span>
+        </div>
+
+        <!-- Đĩa nhạc xoay -->
+        <div class="relative mt-1">
+          <span class="absolute -top-3 -right-0.5 text-white/80 text-xs">♫</span>
+          <div class="w-11 h-11 rounded-full music-disc-gradient border-2 border-white/60 animate-disc"></div>
+        </div>
+      </aside>
+
+      <!-- Bottom Left Caption & Metadata -->
+      <div class="relative z-[3] pl-4 pr-[74px] pb-5 text-white">
+        <div class="flex items-center gap-1.5 mb-2 flex-wrap">
+          <span class="text-base font-bold drop-shadow">@linhdan.creatives</span>
+          <span class="inline-flex text-white" title="Đã xác minh">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M12 2l2.4 2.4 3.4-.4.4 3.4L20.6 10l-2.4 2.4.4 3.4-3.4.4L12.8 18.6 10.4 16.2l-3.4.4-.4-3.4L4.2 10.8l2.4-2.4-.4-3.4 3.4-.4L12 2z"></path>
+              <polyline points="9 11 11 13 15 9"></polyline>
+            </svg>
+          </span>
+          <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">
+            TÁC GIẢ
+          </span>
+        </div>
+
+        <p class="text-sm leading-snug text-white/95 mb-3 drop-shadow">
+          Một ngày dạo quanh phố phường Hà Nội đón nắng sớm 🌿☕ <span class="font-semibold">#vibes #hanoi #dailyvlog</span>
+        </p>
+
+        <div class="flex items-center gap-2">
+          <div class="w-[22px] h-[22px] rounded-full bg-white/25 flex items-center justify-center shrink-0">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+          </div>
+          <span class="text-[13px] text-white/90 truncate">Original sound - Dan Dan • Nhạc nền thịnh hành</span>
         </div>
       </div>
-    </main>
 
-    <!-- ================= BOTTOM NAVIGATION ================= -->
-    <nav class="flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white border-t border-gray-100 shrink-0">
-      <button class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
+      <!-- Video Progress Bar -->
+      <div class="absolute bottom-0 inset-x-0 h-[3.5px] bg-white/35 z-[5]">
+        <div class="w-[68%] h-full bg-rose-600"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= BOTTOM NAVIGATION ================= -->
+  <nav class="flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white border-t border-gray-100 shrink-0">
+    <button class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Trang chủ</span>
+    </button>
+
+    <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+      </svg>
+      <span>Khám phá</span>
+    </button>
+
+    <button class="w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition" aria-label="Tạo video mới">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
+      <div class="relative flex items-center justify-center">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
-        <span>Trang chủ</span>
-      </button>
+        <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-600 ring-[1.5px] ring-white"></span>
+      </div>
+      <span>Hộp thư</span>
+    </button>
 
-      <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
-        <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-        </svg>
-        <span>Khám phá</span>
-      </button>
+    <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Hồ sơ" class="w-6 h-6 rounded-full object-cover">
+      <span>Hồ sơ</span>
+    </button>
+  </nav>
 
-      <button class="w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition" aria-label="Tạo video mới">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-
-      <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
-        <div class="relative flex items-center justify-center">
-          <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-600 ring-[1.5px] ring-white"></span>
-        </div>
-        <span>Hộp thư</span>
-      </button>
-
-      <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Hồ sơ" class="w-6 h-6 rounded-full object-cover">
-        <span>Hồ sơ</span>
-      </button>
-    </nav>
-
-  </div>
+</div>
 
 </body>
 </html>
