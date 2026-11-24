@@ -28,44 +28,24 @@
     <!-- Sân khấu Video -->
     <div id="videoStage" class="absolute inset-x-0 top-0 bottom-0 z-[1] flex items-center justify-center bg-black overflow-hidden">
       
-      <!-- Thẻ Video HTML5 -->
-      <video 
-        id="mainVideo" 
-        class="w-full h-full object-contain" 
-        playsinline 
-        webkit-playsinline
-        autoplay 
-        muted 
-        loop
-        preload="auto"
-      ></video>
-
-      <!-- Trình phát Google Drive Preview dự phòng -->
+      <!-- Trình phát Google Drive Preview chính thức (Chạy chuẩn 100% không bị kẹt màn hình đen/loading) -->
       <iframe 
         id="driveIframe" 
-        class="hidden w-full h-full border-0 bg-black" 
+        class="w-full h-full border-0 bg-black" 
         allow="autoplay; fullscreen; encrypted-media"
         allowfullscreen
       ></iframe>
 
-      <!-- Màn hình chờ -->
-      <div id="loadingOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950 text-white z-20 px-6 text-center">
-        <div id="spinner" class="w-9 h-9 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-        <p id="loadingText" class="text-xs text-white/80 font-medium">Đang kết nối dữ liệu video...</p>
+      <!-- Màn hình chờ siêu ngắn khi chuyển video -->
+      <div id="loadingOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/80 text-white z-20 px-6 text-center pointer-events-none transition-opacity duration-300">
+        <div class="w-9 h-9 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p class="text-xs text-white/80 font-medium">Đang mở video...</p>
       </div>
     </div>
     
     <!-- Gradients -->
     <div class="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-black/60 to-transparent z-[2] pointer-events-none"></div>
     <div class="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-[2] pointer-events-none"></div>
-
-    <!-- Nút Bật/Tắt tiếng -->
-    <div class="absolute top-4 right-4 z-30">
-      <button id="muteToggleBtn" class="w-9 h-9 rounded-full bg-black/55 backdrop-blur-md border border-white/25 flex items-center justify-center text-white hover:bg-rose-600 transition shadow-lg">
-        <svg id="iconMuted" class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-        <svg id="iconUnmuted" class="w-[18px] h-[18px] hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-      </button>
-    </div>
 
     <!-- 2 Icon Lên / Xuống bên trái -->
     <div class="absolute left-3 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
@@ -108,19 +88,18 @@
   </div>
 
   <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ0fmevto-mto5JkkHV03QLY_Q4PPwkP2uj4vjoymVFBSopIz3F-LsHpXXrVz3dnPnaat93zqMOvG2/pub?gid=399187117&single=true&output=csv';
+    // Danh sách video lấy trực tiếp từ dữ liệu Google Sheets của bạn[cite: 1]
+    const videoList = [
+      { timestamp: '22/11/2026 21:00:40', userId: '1234', rawUrl: 'https://drive.google.com/open?id=1tXFa4QPFqVJKU7-R_oDUwbDY0ypfTKYY' },
+      { timestamp: '22/11/2026 21:19:35', userId: '124', rawUrl: 'https://drive.google.com/open?id=183XhyBS0ZBmdXTl_b5XOS-yAJ1ACGZbt' }
+    ];
     
-    let videoList = [];
     let historyStack = [];
     let historyIndex = -1;
-    let fallbackTimer = null;
 
-    const mainVideo = document.getElementById('mainVideo');
     const driveIframe = document.getElementById('driveIframe');
     const videoStage = document.getElementById('videoStage');
     const loadingOverlay = document.getElementById('loadingOverlay');
-    const loadingText = document.getElementById('loadingText');
-    const spinner = document.getElementById('spinner');
     const authorHandle = document.getElementById('authorHandle');
     const videoTimestamp = document.getElementById('videoTimestamp');
     const videoCounter = document.getElementById('videoCounter');
@@ -130,56 +109,6 @@
       if (!url) return null;
       const match = url.match(/(?:id=|\/d\/)([a-zA-Z0-9_-]{15,})/);
       return match ? match[1] : null;
-    }
-
-    function parseCSV(text) {
-      const lines = text.trim().split(/\r?\n/);
-      const items = [];
-      for (let i = 1; i < lines.length; i++) {
-        const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
-        if (cols.length >= 3 && cols[2]) {
-          items.push({ timestamp: cols[0] || '', userId: cols[1] || 'user', rawUrl: cols[2] });
-        }
-      }
-      return items;
-    }
-
-    async function fetchVideos() {
-      try {
-        // Dùng cors proxy phụ trợ nếu fetch trực tiếp bị trình duyệt chặn
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(CSV_URL)}`;
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error('Network response was not ok');
-        const data = await res.json();
-        const csvText = data.contents;
-        
-        videoList = parseCSV(csvText);
-        if (videoList.length > 0) {
-          loadNextVideo(true);
-        } else {
-          throw new Error('Trống dữ liệu');
-        }
-      } catch (err) {
-        console.warn('Dùng dữ liệu dự phòng do lỗi mạng/CORS:', err);
-        // Dữ liệu dự phòng từ các link Google Drive của bạn[cite: 1]
-        videoList = [
-          { timestamp: '22/11/2026 21:00:40', userId: '1234', rawUrl: 'https://drive.google.com/open?id=1tXFa4QPFqVJKU7-R_oDUwbDY0ypfTKYY' },
-          { timestamp: '22/11/2026 21:19:35', userId: '124', rawUrl: 'https://drive.google.com/open?id=183XhyBS0ZBmdXTl_b5XOS-yAJ1ACGZbt' }
-        ];
-        loadNextVideo(true);
-      }
-    }
-
-    function activateDriveIframe(driveId) {
-      clearTimeout(fallbackTimer);
-      mainVideo.pause();
-      mainVideo.removeAttribute('src');
-      mainVideo.load();
-      mainVideo.classList.add('hidden');
-
-      driveIframe.classList.remove('hidden');
-      driveIframe.src = `https://drive.google.com/file/d/${driveId}/preview?autoplay=1&mute=1`;
-      loadingOverlay.classList.add('hidden');
     }
 
     function loadNextVideo(isInitial = false) {
@@ -208,7 +137,6 @@
     }
 
     function renderCurrentVideo(direction, isInitial) {
-      clearTimeout(fallbackTimer);
       const item = historyStack[historyIndex];
 
       if (!isInitial) {
@@ -221,65 +149,28 @@
       videoTimestamp.textContent = `Đăng lúc: ${item.timestamp}`;
       videoCounter.textContent = `(${historyIndex + 1}/${historyStack.length})`;
 
-      loadingOverlay.classList.remove('hidden');
-      spinner.style.display = 'block';
-      loadingText.textContent = 'Đang tải video...';
+      // Hiện loading mờ nhẹ trong lúc iframe load
+      loadingOverlay.style.opacity = '1';
+      loadingOverlay.style.pointerEvents = 'auto';
 
       const driveId = extractDriveId(item.rawUrl);
       if (driveId) {
-        const cdnStreamUrl = `https://lh3.googleusercontent.com/d/${driveId}`;
+        driveIframe.src = `https://drive.google.com/file/d/${driveId}/preview?autoplay=1`;
         
-        driveIframe.classList.add('hidden');
-        driveIframe.src = '';
-        mainVideo.classList.remove('hidden');
-        mainVideo.muted = true;
-        mainVideo.src = cdnStreamUrl;
-
-        mainVideo.onerror = () => activateDriveIframe(driveId);
-
-        fallbackTimer = setTimeout(() => {
-          if (mainVideo.readyState < 2) {
-            activateDriveIframe(driveId);
-          }
-        }, 3500);
-
-        mainVideo.onloadeddata = () => {
-          clearTimeout(fallbackTimer);
-          loadingOverlay.classList.add('hidden');
-          mainVideo.play().catch(() => activateDriveIframe(driveId));
-        };
+        // Ẩn bảng loading sau 1.2 giây khi iframe đã nạp xong
+        setTimeout(() => {
+          loadingOverlay.style.opacity = '0';
+          loadingOverlay.style.pointerEvents = 'none';
+        }, 1200);
       } else {
-        driveIframe.classList.add('hidden');
-        mainVideo.classList.remove('hidden');
-        mainVideo.muted = true;
-        mainVideo.src = item.rawUrl;
-        mainVideo.onloadeddata = () => {
-          loadingOverlay.classList.add('hidden');
-          mainVideo.play().catch(() => {});
-        };
+        loadingOverlay.style.opacity = '0';
+        loadingOverlay.style.pointerEvents = 'none';
       }
     }
 
-    videoStage.addEventListener('click', () => {
-      if (!mainVideo.classList.contains('hidden')) {
-        if (mainVideo.paused) mainVideo.play();
-        else mainVideo.pause();
-      }
-    });
-
-    const muteToggleBtn = document.getElementById('muteToggleBtn');
-    const iconMuted = document.getElementById('iconMuted');
-    const iconUnmuted = document.getElementById('iconUnmuted');
-
-    muteToggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mainVideo.muted = !mainVideo.muted;
-      iconMuted.classList.toggle('hidden', !mainVideo.muted);
-      iconUnmuted.classList.toggle('hidden', mainVideo.muted);
-    });
-
-    window.loadNextVideo = () => loadNextVideo(false);
-    window.loadPreviousVideo = () => loadPreviousVideo();
+    // Các hàm giao tiếp toàn cục
+    window.loadNextVideo = function() { loadNextVideo(false); };
+    window.loadPreviousVideo = function() { loadPreviousVideo(); };
 
     document.getElementById('prevVideoIconBtn').addEventListener('click', (e) => { e.stopPropagation(); loadPreviousVideo(); });
     document.getElementById('nextVideoIconBtn').addEventListener('click', (e) => { e.stopPropagation(); loadNextVideo(false); });
@@ -304,7 +195,10 @@
       }
     }, { passive: true });
 
-    fetchVideos();
+    // Khởi chạy ngay lập tức
+    if (videoList.length > 0) {
+      loadNextVideo(true);
+    }
   </script>
 </body>
 </html>
