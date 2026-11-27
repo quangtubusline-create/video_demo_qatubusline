@@ -34,12 +34,92 @@
     .animate-slide-down {
       animation: slideDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
+    @keyframes sheetSlideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .animate-sheet-up {
+      animation: sheetSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
   </style>
 </head>
 <body class="bg-white sm:bg-gray-100 flex justify-center items-center min-h-[100dvh] m-0 p-0 overflow-hidden select-none">
 
-  <div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
+  <!-- Iframe ẩn dùng để hứng kết quả submit Google Form không bị chuyển hướng trang -->
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+  <div id="appShell" class="relative w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl">
     
+    <!-- ========================================== -->
+    <!-- MÀN HÌNH ĐĂNG KÝ / ĐĂNG NHẬP BẮT BUỘC      -->
+    <!-- ========================================== -->
+    <div id="authGateOverlay" class="absolute inset-0 z-[60] bg-white flex flex-col justify-between p-6 overflow-y-auto">
+      <div class="pt-4">
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-600 to-rose-400 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-rose-600/25">
+            V
+          </div>
+          <span class="text-2xl font-bold text-gray-900 tracking-tight">Vibe</span>
+        </div>
+
+        <h2 id="authHeading" class="text-[22px] font-bold text-gray-900 leading-snug">Tạo tài khoản mới</h2>
+        <p id="authSubheading" class="text-xs text-gray-500 mt-1">Đăng ký thành viên để khám phá và tương tác.</p>
+
+        <!-- Chuyển đổi Tab Đăng ký / Đăng nhập -->
+        <div class="grid grid-cols-2 gap-1 p-1 bg-gray-100 rounded-xl mt-4">
+          <button type="button" id="tabRegister" class="py-2 text-xs font-bold rounded-lg bg-white text-gray-900 shadow-xs transition">Đăng ký</button>
+          <button type="button" id="tabLogin" class="py-2 text-xs font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition">Đăng nhập</button>
+        </div>
+
+        <!-- Form Đăng ký / Đăng nhập -->
+        <form id="authForm" class="mt-4 space-y-3" action="" method="POST" target="hidden_iframe">
+          
+          <!-- Các trường chỉ hiện khi Đăng ký -->
+          <div id="registerFields" class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Họ và tên</label>
+              <input type="text" id="regFullName" name="entry.1591379750" placeholder="Ví dụ: Kim Quang Tú" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 bg-gray-50/70 focus:bg-white focus:outline-none focus:border-rose-600 transition">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Địa chỉ Email</label>
+              <input type="email" id="regEmail" name="entry.656045774" placeholder="example@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 bg-gray-50/70 focus:bg-white focus:outline-none focus:border-rose-600 transition">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Số điện thoại</label>
+              <input type="tel" id="regPhone" name="entry.392550914" placeholder="0901234567" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 bg-gray-50/70 focus:bg-white focus:outline-none focus:border-rose-600 transition">
+            </div>
+
+            <!-- Trường UserID tự động sinh và ẩn đi -->
+            <input type="hidden" id="regUserId" name="entry.1081221907" value="">
+          </div>
+
+          <!-- Ô mật khẩu dùng chung cho cả đăng ký & đăng nhập -->
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Mật khẩu</label>
+            <input type="password" id="regPassword" name="entry.1799832808" required placeholder="Nhập mật khẩu..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 bg-gray-50/70 focus:bg-white focus:outline-none focus:border-rose-600 transition">
+          </div>
+
+          <!-- Ô nhập SĐT/Email chuyên biệt dành cho màn hình Đăng nhập -->
+          <div id="loginAccountGroup" class="hidden">
+            <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Email hoặc Số điện thoại để tra cứu</label>
+            <input type="text" id="loginAccountInput" placeholder="Nhập email hoặc SĐT đã đăng ký..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 bg-gray-50/70 focus:bg-white focus:outline-none focus:border-rose-600 transition">
+          </div>
+
+          <p id="authErrorMsg" class="hidden text-xs text-rose-600 font-medium bg-rose-50 px-3 py-2 rounded-lg"></p>
+
+          <button type="submit" id="authSubmitBtn" class="w-full py-3.5 mt-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-lg shadow-rose-600/30 active:scale-[0.98] transition flex items-center justify-center gap-2">
+            <span>Đăng Ký & Bắt Đầu Xem</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="pt-4 pb-1 text-center">
+        <p class="text-[11px] text-gray-400">UserID hệ thống tự động sinh ngẫu nhiên và bảo mật cho riêng bạn.</p>
+      </div>
+    </div>
+
     <!-- Top Header -->
     <header class="flex items-center justify-between px-4 py-3 bg-white z-20 shrink-0">
       <div class="flex items-center gap-1.5">
@@ -52,13 +132,15 @@
       <h1 class="text-[17px] font-semibold text-gray-900">Trang Chủ</h1>
 
       <div class="flex items-center gap-3.5">
-        <button id="nextVideoBtnTop" title="Video tiếp theo" class="text-gray-900 hover:opacity-75 transition">
+        <button data-popup="search" title="Tìm kiếm" class="popup-trigger text-gray-900 hover:opacity-75 transition">
           <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+        <button data-popup="profile" title="Hồ sơ cá nhân" class="popup-trigger">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+        </button>
       </div>
     </header>
 
@@ -66,7 +148,6 @@
     <main class="flex-1 px-2 pb-1.5 flex flex-col overflow-hidden min-h-0">
       <div id="swipeContainer" class="relative flex-1 w-full h-full rounded-[20px] overflow-hidden bg-neutral-950 flex flex-col justify-between">
         
-        <!-- Vùng hiển thị video -->
         <div id="videoStage" class="absolute inset-0 z-[1] flex items-center justify-center bg-black overflow-hidden transition-transform duration-150 ease-out">
           <video 
             id="mainVideo" 
@@ -83,32 +164,28 @@
             allow="autoplay; fullscreen"
           ></iframe>
 
-          <!-- Màn hình chờ -->
           <div id="loadingOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/90 text-white z-10 pointer-events-none">
             <div class="w-9 h-9 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mb-3"></div>
             <p class="text-xs text-white/80 font-medium">Đang tải video từ Google Sheets...</p>
           </div>
         </div>
         
-        <!-- Gradient Overlay -->
         <div class="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/50 to-transparent z-[3] pointer-events-none"></div>
         <div class="absolute bottom-0 inset-x-0 h-60 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-[3] pointer-events-none"></div>
 
-        <!-- Top Controls Inside Video -->
         <div class="relative z-[4] flex items-center justify-between px-3.5 py-4 pointer-events-auto">
-          <div class="flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-full shadow-md">
+          <button data-popup="live" class="popup-trigger flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-full shadow-md active:scale-95 transition">
             <span class="w-[7px] h-[7px] rounded-full bg-rose-600 animate-pulse"></span>
             <span class="text-[10px] font-bold leading-[1.1] text-gray-900 text-center uppercase">
               TRỰC<br>TIẾP
             </span>
-          </div>
+          </button>
 
           <div class="flex items-center gap-4">
-            <button class="text-white/85 text-[15px] font-semibold text-center leading-tight drop-shadow pb-1">Đang theo<br>dõi</button>
+            <button data-popup="following" class="popup-trigger text-white/85 text-[15px] font-semibold text-center leading-tight drop-shadow pb-1">Đang theo<br>dõi</button>
             <button class="relative text-white text-[15px] font-bold text-center leading-tight drop-shadow pb-1 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-6 after:h-[2.5px] after:bg-white after:rounded-full">Dành cho<br>bạn</button>
           </div>
 
-          <!-- Nút bật/tắt tiếng -->
           <button id="muteToggleBtn" class="w-9 h-9 rounded-full bg-white/85 flex items-center justify-center text-gray-900 hover:bg-white transition shadow" aria-label="Bật/Tắt tiếng">
             <svg id="iconMuted" class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -122,7 +199,6 @@
           </button>
         </div>
 
-        <!-- Nút điều hướng Lên / Xuống nổi bên trái (Nút Lên đã được đổi sang màu hồng rực sáng) -->
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-[5] flex flex-col gap-3 pointer-events-auto">
           <button id="prevVideoBtn" title="Video trước" class="w-10 h-10 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow-lg shadow-rose-600/40 transition active:scale-90 hidden">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
@@ -132,11 +208,10 @@
           </button>
         </div>
 
-        <!-- Right Sidebar -->
         <aside class="absolute right-3 bottom-6 z-[4] flex flex-col items-center gap-4 pointer-events-auto">
-          <div class="relative mb-1.5">
+          <div data-popup="creator" class="popup-trigger relative mb-1.5 cursor-pointer">
             <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="Creator" class="w-12 h-12 rounded-full border-2 border-white object-cover">
-            <button class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow">+</button>
+            <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm font-bold shadow">+</span>
           </div>
 
           <div id="likeBtn" class="flex flex-col items-center gap-1 cursor-pointer group">
@@ -148,27 +223,26 @@
             <span class="text-xs font-semibold text-white drop-shadow">184.2K</span>
           </div>
 
-          <div class="flex flex-col items-center gap-1 cursor-pointer">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900">
+          <div data-popup="comments" class="popup-trigger flex flex-col items-center gap-1 cursor-pointer group">
+            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
               <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             </div>
             <span class="text-xs font-semibold text-white drop-shadow">2,481</span>
           </div>
 
-          <div class="flex flex-col items-center gap-1 cursor-pointer">
-            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900">
+          <div data-popup="share" class="popup-trigger flex flex-col items-center gap-1 cursor-pointer group">
+            <div class="w-[46px] h-[46px] rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-gray-900 group-active:scale-90 transition">
               <svg class="w-[21px] h-[21px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
             </div>
             <span class="text-xs font-semibold text-white drop-shadow">34.5K</span>
           </div>
 
-          <div class="relative mt-1">
+          <div data-popup="sound" class="popup-trigger relative mt-1 cursor-pointer">
             <span class="absolute -top-3 -right-0.5 text-white/80 text-xs">♫</span>
             <div class="w-11 h-11 rounded-full music-disc-gradient border-2 border-white/60 animate-disc"></div>
           </div>
         </aside>
 
-        <!-- Video Info -->
         <div class="relative z-[4] pl-14 pr-[74px] pb-5 text-white pointer-events-none">
           <div class="flex items-center gap-1.5 mb-2 flex-wrap">
             <span id="authorHandle" class="text-base font-bold drop-shadow">@user</span>
@@ -183,7 +257,6 @@
           </div>
         </div>
 
-        <!-- Progress Bar -->
         <div class="absolute bottom-0 inset-x-0 h-[3.5px] bg-white/35 z-[5]">
           <div id="progressBar" class="w-0 h-full bg-rose-600 transition-all duration-150"></div>
         </div>
@@ -192,214 +265,85 @@
 
     <!-- Bottom Navigation -->
     <nav class="flex items-center justify-around px-2 pt-2 pb-[max(14px,env(safe-area-inset-bottom))] bg-white border-t border-gray-100 shrink-0 z-20">
-      <button class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
+      <button id="homeNavBtn" class="flex flex-col items-center gap-1 text-gray-900 text-[11px] font-semibold min-w-[56px]">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         <span>Trang chủ</span>
       </button>
 
-      <button class="flex flex-col items-center gap-1 text-gray-500 text-[11px] font-medium min-w-[56px]">
+      <button data-popup="explore" class="popup-trigger flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         <span>Khám phá</span>
       </button>
 
-      <button id="randomBtnCenter" title="Video tiếp theo" class="w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition">
+      <button data-popup="upload" title="Đăng video mới" class="popup-trigger w-[46px] h-[46px] rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-600/35 active:scale-95 transition">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </button>
 
-      <button class="flex flex-col items-center gap-1 text-gray-500 text-[11px] font-medium min-w-[56px]">
+      <button data-popup="inbox" class="popup-trigger flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
         <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         <span>Hộp thư</span>
       </button>
 
-      <button class="flex flex-col items-center gap-1 text-gray-500 text-[11px] font-medium min-w-[56px]">
+      <button data-popup="profile" class="popup-trigger flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Hồ sơ" class="w-6 h-6 rounded-full object-cover">
-        <span>Hồ sơ</span>
+        <span id="navProfileLabel">Hồ sơ</span>
       </button>
     </nav>
+
+    <!-- POPUP MODAL CHỨA IFRAME -->
+    <div id="featurePopupOverlay" class="hidden absolute inset-0 z-50 bg-black/60 backdrop-blur-[2px] flex flex-col justify-end">
+      <div id="popupBackdropClose" class="flex-1 w-full cursor-pointer"></div>
+
+      <div id="featurePopupSheet" class="w-full h-[82%] bg-white rounded-t-[26px] shadow-2xl flex flex-col overflow-hidden animate-sheet-up">
+        <div class="w-full flex justify-center pt-2.5 pb-1 bg-white shrink-0">
+          <div class="w-10 h-1 rounded-full bg-gray-300"></div>
+        </div>
+
+        <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-white shrink-0">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-rose-600 shrink-0"></span>
+            <h2 id="popupTitle" class="text-[15px] font-bold text-gray-900 truncate">Tính năng</h2>
+          </div>
+
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button id="logoutBtn" title="Đăng xuất tài khoản" class="hidden px-2.5 h-8 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-bold transition">
+              Đăng xuất
+            </button>
+            <a id="popupExternalLink" href="#" target="_blank" rel="noopener noreferrer" title="Mở trong tab mới" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+            <button id="closePopupBtn" title="Đóng" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-rose-100 hover:text-rose-600 text-gray-700 flex items-center justify-center transition">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="relative flex-1 w-full bg-gray-50 overflow-hidden">
+          <div id="popupIframeLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-10 pointer-events-none">
+            <div class="w-7 h-7 border-[3px] border-rose-600 border-t-transparent rounded-full animate-spin mb-2"></div>
+            <p class="text-xs text-gray-500 font-medium">Đang tải nội dung liên kết...</p>
+          </div>
+
+          <iframe 
+            id="popupIframe" 
+            src="" 
+            class="w-full h-full border-0 bg-white"
+            allow="camera; microphone; autoplay; clipboard-write; encrypted-media; fullscreen"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ0fmevto-mto5JkkHV03QLY_Q4PPwkP2uj4vjoymVFBSopIz3F-LsHpXXrVz3dnPnaat93zqMOvG2/pub?gid=399187117&single=true&output=csv';
-    
-    let videoList = [];
-    let historyStack = [];
-    let historyIndex = -1;
-    let isTransitioning = false;
-
-    const mainVideo = document.getElementById('mainVideo');
-    const driveIframe = document.getElementById('driveIframe');
-    const videoStage = document.getElementById('videoStage');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const authorHandle = document.getElementById('authorHandle');
-    const videoTimestamp = document.getElementById('videoTimestamp');
-    const progressBar = document.getElementById('progressBar');
-    const prevVideoBtn = document.getElementById('prevVideoBtn');
-
-    function extractDriveId(url) {
-      if (!url) return null;
-      const match = url.match(/(?:id=|\/d\/)([a-zA-Z0-9_-]{15,})/);
-      return match ? match[1] : null;
-    }
-
-    function parseCSV(text) {
-      const lines = text.trim().split(/\r?\n/);
-      const items = [];
-      for (let i = 1; i < lines.length; i++) {
-        const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
-        if (cols.length >= 3 && cols[2]) {
-          items.push({ timestamp: cols[0] || '', userId: cols[1] || 'user', rawUrl: cols[2] });
-        }
-      }
-      return items;
-    }
-
-    async function fetchVideos() {
-      try {
-        const res = await fetch(`${CSV_URL}&t=${Date.now()}`);
-        const csvText = await res.text();
-        videoList = parseCSV(csvText);
-        if (videoList.length > 0) {
-          loadNextVideo(true);
-        } else {
-          loadingOverlay.innerHTML = '<p class="text-sm text-white/80">Chưa có video.</p>';
-        }
-      } catch (err) {
-        loadingOverlay.innerHTML = '<p class="text-sm text-rose-400">Lỗi tải dữ liệu.</p>';
-      }
-    }
-
-    function updateNavButtons() {
-      if (historyIndex <= 0) {
-        prevVideoBtn.classList.add('hidden');
-      } else {
-        prevVideoBtn.classList.remove('hidden');
-      }
-    }
-
-    function loadNextVideo(isInitial = false) {
-      if (videoList.length === 0 || isTransitioning) return;
-      isTransitioning = true;
-      setTimeout(() => { isTransitioning = false; }, 350);
-
-      if (historyIndex < historyStack.length - 1) {
-        historyIndex++;
-        renderCurrentVideo('up', false);
-        updateNavButtons();
-        return;
-      }
-
-      let randomIndex = Math.floor(Math.random() * videoList.length);
-      if (videoList.length > 1 && historyStack.length > 0) {
-        while (videoList[randomIndex].rawUrl === historyStack[historyStack.length - 1].rawUrl) {
-          randomIndex = Math.floor(Math.random() * videoList.length);
-        }
-      }
-
-      const item = videoList[randomIndex];
-      historyStack.push(item);
-      historyIndex = historyStack.length - 1;
-
-      renderCurrentVideo('up', isInitial);
-      updateNavButtons();
-    }
-
-    function loadPreviousVideo() {
-      if (historyIndex <= 0 || isTransitioning) return;
-      isTransitioning = true;
-      setTimeout(() => { isTransitioning = false; }, 350);
-
-      historyIndex--;
-      renderCurrentVideo('down', false);
-      updateNavButtons();
-    }
-
-    function renderCurrentVideo(direction, isInitial) {
-      const item = historyStack[historyIndex];
-      videoStage.style.transform = '';
-
-      if (!isInitial) {
-        videoStage.classList.remove('animate-slide-up', 'animate-slide-down');
-        void videoStage.offsetWidth;
-        videoStage.classList.add(direction === 'up' ? 'animate-slide-up' : 'animate-slide-down');
-      }
-
-      authorHandle.textContent = `@${item.userId}`;
-      videoTimestamp.textContent = `Original sound • ${item.timestamp}`;
-      progressBar.style.width = '0%';
-
-      const driveId = extractDriveId(item.rawUrl);
-      if (driveId) {
-        const directStreamUrl = `https://drive.google.com/uc?export=download&id=${driveId}`;
-        driveIframe.classList.add('hidden');
-        driveIframe.src = '';
-        mainVideo.classList.remove('hidden');
-        mainVideo.src = directStreamUrl;
-        
-        mainVideo.play().then(() => {
-          loadingOverlay.classList.add('hidden');
-        }).catch(() => {
-          mainVideo.classList.add('hidden');
-          driveIframe.classList.remove('hidden');
-          driveIframe.src = `https://drive.google.com/file/d/${driveId}/preview`;
-          loadingOverlay.classList.add('hidden');
-        });
-      } else {
-        driveIframe.classList.add('hidden');
-        driveIframe.src = '';
-        mainVideo.classList.remove('hidden');
-        mainVideo.src = item.rawUrl;
-        mainVideo.play().then(() => {
-          loadingOverlay.classList.add('hidden');
-        }).catch(() => {
-          loadingOverlay.classList.add('hidden');
-        });
-      }
-    }
-
-    mainVideo.addEventListener('timeupdate', () => {
-      if (mainVideo.duration) {
-        progressBar.style.width = `${(mainVideo.currentTime / mainVideo.duration) * 100}%`;
-      }
-    });
-
-    const muteToggleBtn = document.getElementById('muteToggleBtn');
-    const iconMuted = document.getElementById('iconMuted');
-    const iconUnmuted = document.getElementById('iconUnmuted');
-
-    muteToggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mainVideo.muted = !mainVideo.muted;
-      iconMuted.classList.toggle('hidden', !mainVideo.muted);
-      iconUnmuted.classList.toggle('hidden', mainVideo.muted);
-    });
-
-    let liked = false;
-    document.getElementById('likeBtn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      liked = !liked;
-      const heartIcon = document.getElementById('heartIcon');
-      heartIcon.setAttribute('fill', liked ? '#e11d48' : 'none');
-      heartIcon.setAttribute('stroke', liked ? '#e11d48' : 'currentColor');
-    });
-
-    // Gắn sự kiện cho các nút điều hướng
-    document.getElementById('nextVideoBtn').addEventListener('click', () => loadNextVideo(false));
-    prevVideoBtn.addEventListener('click', () => loadPreviousVideo());
-    document.getElementById('nextVideoBtnTop').addEventListener('click', () => loadNextVideo(false));
-    document.getElementById('randomBtnCenter').addEventListener('click', () => loadNextVideo(false));
-
-    // Hỗ trợ phím mũi tên Lên / Xuống trên bàn phím máy tính
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        loadNextVideo(false);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        loadPreviousVideo();
-      }
-    });
-
-    fetchVideos();
-  </script>
+  <script src="./index.js"></script>
 </body>
 </html>

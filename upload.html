@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vibe - Đăng Tải Video</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overscroll-behavior-y: contain;
+    }
+  </style>
+</head>
+<body class="bg-white sm:bg-gray-100 flex justify-center items-center min-h-[100dvh] m-0 p-0 overflow-hidden select-none">
+
+  <div class="w-full h-[100dvh] sm:max-w-[430px] sm:h-[92dvh] sm:max-h-[932px] bg-white flex flex-col overflow-hidden sm:rounded-[32px] sm:shadow-2xl relative">
+    
+    <!-- Top Header -->
+    <header class="flex items-center justify-between px-4 py-3 bg-white z-20 shrink-0 border-b border-gray-100">
+      <button onclick="history.back()" class="text-gray-900 hover:opacity-75 transition p-1" title="Quay lại">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <h1 class="text-[17px] font-bold text-gray-900 tracking-tight">Đăng Tải Video</h1>
+
+      <div class="w-7"></div> <!-- Giữ cân bằng header -->
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 flex flex-col justify-between bg-gray-50/50">
+      
+      <div class="space-y-4">
+        <!-- Vùng chọn file / Dropzone -->
+        <div id="dropZone" class="relative border-2 border-dashed border-gray-300 hover:border-rose-600 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-white transition cursor-pointer group">
+          <input type="file" id="videoFileInput" accept="video/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+          
+          <div id="uploadPlaceholder" class="flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+              <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <p class="text-sm font-semibold text-gray-900">Nhấn để chọn video hoặc kéo thả vào đây</p>
+            <p class="text-xs text-gray-400 mt-1">Hỗ trợ MP4, MOV, WebM (Tối đa 100MB)</p>
+          </div>
+
+          <!-- Khu vực xem trước video sau khi chọn -->
+          <div id="videoPreviewContainer" class="hidden w-full h-48 rounded-xl overflow-hidden bg-black relative">
+            <video id="videoPreviewElement" class="w-full h-full object-contain" controls playsinline></video>
+            <button id="removeFileBtn" type="button" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 hover:bg-rose-600 text-white flex items-center justify-center transition z-20" title="Chọn video khác">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form nhập thông tin video -->
+        <div class="bg-white rounded-2xl p-4 shadow-xs border border-gray-100 space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Tên tài khoản (Author)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">@</span>
+              <input type="text" id="authorInput" value="quangtu.it" class="w-full pl-8 pr-3 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-900 focus:outline-none focus:border-rose-600 bg-gray-50/50">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Mô tả / Caption</label>
+            <textarea id="captionInput" rows="3" placeholder="Chia sẻ cảm nghĩ hoặc hashtag về video này (#vibe #it...)" class="w-full p-3 rounded-xl border border-gray-200 text-sm text-gray-900 focus:outline-none focus:border-rose-600 bg-gray-50/50 resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">Liên kết Google Drive / URL thay thế (Tùy chọn)</label>
+            <input type="text" id="urlInput" placeholder="https://drive.google.com/file/d/..." class="w-full p-3 rounded-xl border border-gray-200 text-sm text-gray-900 focus:outline-none focus:border-rose-600 bg-gray-50/50">
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="pt-4 pb-2">
+        <button id="submitUploadBtn" class="w-full py-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-lg shadow-rose-600/30 transition active:scale-98 flex items-center justify-center gap-2">
+          <span>Đăng Tải Lên Hệ Thống</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    const videoFileInput = document.getElementById('videoFileInput');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const videoPreviewContainer = document.getElementById('videoPreviewContainer');
+    const videoPreviewElement = document.getElementById('videoPreviewElement');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    const submitUploadBtn = document.getElementById('submitUploadBtn');
+
+    // Xử lý khi chọn file video từ máy
+    videoFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const fileURL = URL.createObjectURL(file);
+        videoPreviewElement.src = fileURL;
+        uploadPlaceholder.classList.add('hidden');
+        videoPreviewContainer.classList.remove('hidden');
+      }
+    });
+
+    // Xóa file đã chọn để chọn lại
+    removeFileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      videoFileInput.value = '';
+      videoPreviewElement.src = '';
+      videoPreviewContainer.classList.add('hidden');
+      uploadPlaceholder.classList.remove('hidden');
+    });
+
+    // Xử lý nút Đăng tải
+    submitUploadBtn.addEventListener('click', () => {
+      const author = document.getElementById('authorInput').value.trim();
+      const caption = document.getElementById('captionInput').value.trim();
+      const urlVal = document.getElementById('urlInput').value.trim();
+
+      if (!videoFileInput.files[0] && !urlVal) {
+        alert('Vui lòng chọn một file video hoặc nhập đường dẫn URL!');
+        return;
+      }
+
+      submitUploadBtn.disabled = true;
+      submitUploadBtn.innerHTML = `
+        <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span>Đang tải lên...</span>
+      `;
+
+      // Giả lập thời gian tải lên hoàn tất
+      setTimeout(() => {
+        alert('Đăng tải video thành công!');
+        history.back();
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
