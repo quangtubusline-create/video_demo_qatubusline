@@ -139,8 +139,10 @@
           </svg>
         </button>
         <button data-popup="profile" title="Hồ sơ cá nhân" class="popup-trigger">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200">
-        </button>
+<div id="headerAvatarContainer" class="w-8 h-8 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gradient-to-br from-rose-600 to-rose-400 text-white text-xs font-bold shadow-xs">
+    QT
+  </div>        
+</button>
       </div>
     </header>
 
@@ -285,8 +287,10 @@
       </button>
 
       <button data-popup="profile" class="popup-trigger flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 text-[11px] font-medium min-w-[56px] transition">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Hồ sơ" class="w-6 h-6 rounded-full object-cover">
-        <span id="navProfileLabel">Hồ sơ</span>
+        <div id="navAvatarContainer" class="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-rose-600 to-rose-400 text-white text-[10px] font-bold border border-rose-600">
+          QT
+         </div>        
+         <span id="navProfileLabel">Hồ sơ</span>
       </button>
     </nav>
 

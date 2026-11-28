@@ -40,8 +40,11 @@
         </div>
 
         <div class="px-4 -mt-12 flex justify-between items-end relative z-10">
-          <div class="relative">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-24 h-24 rounded-full border-4 border-white object-cover shadow-md">
+          <!-- Khung chứa Avatar (Sẽ tự động hiển thị chữ cái đại diện từ localStorage) -->
+          <div id="profileAvatarContainer" class="relative">
+            <div class="w-24 h-24 rounded-full border-4 border-white bg-gradient-to-br from-rose-600 to-rose-400 text-white flex items-center justify-center font-bold text-2xl shadow-md">
+              QT
+            </div>
             <span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white" title="Đang hoạt động"></span>
           </div>
 
@@ -58,10 +61,10 @@
         <!-- User Info -->
         <div class="px-4 pt-3">
           <div class="flex items-center gap-1.5">
-            <h2 class="text-xl font-bold text-gray-900 tracking-tight">Kim Quang Tú</h2>
+            <h2 id="profileFullName" class="text-xl font-bold text-gray-900 tracking-tight">Kim Quang Tú</h2>
             <svg class="w-4 h-4 text-blue-500 fill-blue-500" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
           </div>
-          <p class="text-xs text-gray-500 font-medium mt-0.5">@quangtu.it • Đại học Mở TP.HCM</p>
+          <p id="profileHandle" class="text-xs text-gray-500 font-medium mt-0.5">@quangtu.it • Đại học Mở TP.HCM</p>
           <p class="text-xs text-gray-700 mt-2.5 leading-relaxed">
             💻 Đam mê Web Development & UI/UX Design. Đang phát triển hệ sinh thái web quản lý giao vận & ứng dụng học tập thông minh. 🚀
           </p>
@@ -184,5 +187,55 @@
     </nav>
 
   </div>
+
+  <script>
+    (function() {
+      const USER_STORAGE_KEY = 'vibe_registered_user';
+      const savedRaw = localStorage.getItem(USER_STORAGE_KEY);
+      
+      if (savedRaw) {
+        try {
+          const user = JSON.parse(savedRaw);
+          
+          // 1. Cập nhật Họ và tên
+          if (user.fullName) {
+            const nameEl = document.getElementById('profileFullName');
+            if (nameEl) nameEl.textContent = user.fullName;
+
+            // 2. Tự động tạo chữ cái đại diện (Initials) từ tên (VD: "Kim Quang Tú" -> "QT")
+            const nameParts = user.fullName.trim().split(/\s+/);
+            let initials = 'QT';
+            if (nameParts.length >= 2) {
+              initials = (nameParts[nameParts.length - 2][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+            } else if (nameParts.length === 1) {
+              initials = nameParts[0].substring(0, 2).toUpperCase();
+            }
+
+            // 3. Hiển thị chữ cái đại diện lên Avatar
+            const avatarContainer = document.getElementById('profileAvatarContainer');
+            if (avatarContainer) {
+              avatarContainer.innerHTML = `
+                <div class="w-24 h-24 rounded-full border-4 border-white bg-gradient-to-br from-rose-600 to-rose-400 text-white flex items-center justify-center font-bold text-2xl shadow-md">
+                  ${initials}
+                </div>
+                <span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white" title="Đang hoạt động"></span>
+              `;
+            }
+          }
+
+          // 4. Cập nhật Handle (@username) dựa trên email nếu có
+          if (user.email) {
+            const handleEl = document.getElementById('profileHandle');
+            if (handleEl) {
+              const emailPrefix = user.email.split('@')[0];
+              handleEl.textContent = `@${emailPrefix} • Đại học Mở TP.HCM`;
+            }
+          }
+        } catch (e) {
+          console.error('Không thể đọc thông tin người dùng từ localStorage:', e);
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
